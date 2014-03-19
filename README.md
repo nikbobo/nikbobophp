@@ -1,4 +1,0 @@
-nikbobophp
-==========
-
-Nikbobo PHP Framework
