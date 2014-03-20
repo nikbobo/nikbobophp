@@ -11,7 +11,7 @@
  */
 defined('IN_NP') or exit('Access Denied');
 /**
- * 数据库函数
+ * PDO MySQL 数据库函数
  */
 /**
  * 使用配置文件中的参数连接 MySQL 主库

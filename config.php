@@ -135,3 +135,22 @@ define('NP_MYSQL_DB_PREFIX', 'np_');
 /**
  * 以上是 MySQL 专属常量
  */
+/**
+ * 缓存配置
+ */
+/**
+ * 使用缓存
+ *
+ * 智能处理，可临时关闭缓存，不会导致网站报错
+ */
+define('NP_USE_CACHE', true);
+/**
+ * 使用的缓存类型，根据此调用相应缓存函数
+ *
+ * 由于涉嫌文件处理，请确认参数为小写字母
+ * 不小写也无所谓，会自动转换
+ * 系统自带 memcache、WinCache、XCache、APC，其中 memcache 无缝切换 SAE
+ * 如需设置 memcache 服务器等参数，请直接在 library/function.cache.memcache.php 中设置
+ * 推荐拷贝一份 framework 中的 library/function.cache.memcache.php 到 app 相应目录中设置，会自动覆盖
+ */
+define('NP_CACHE_TYPE', 'memcache');

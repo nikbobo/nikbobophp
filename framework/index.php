@@ -130,7 +130,17 @@ if (defined('NP_USE_DATABASE') && NP_USE_DATABASE) {
         file_exists($sDatabaseFunctionPath) and require $sDatabaseFunctionPath;
     }
 }
-// todo 在此载入缓存函数 function.extra.php
+if (defined('NP_USE_CACHE') && NP_USE_CACHE) {
+    $sCacheFunctionPath = NP_APP_DIR . '/library/function.cache.' . strtolower(NP_CACHE_TYPE) . '.php';
+    if (file_exists($sCacheFunctionPath)) {
+        require $sCacheFunctionPath;
+    } else {
+        $sCacheFunctionPath = NP_FRAMEWORK_DIR . '/library/function.cache.' . strtolower(NP_CACHE_TYPE) . '.php';
+        file_exists($sCacheFunctionPath) and require $sCacheFunctionPath;
+    }
+} else {
+    require NP_FRAMEWORK_DIR . '/library/function.cache.none.php';
+}
 /**
  * 路由分发
  */
