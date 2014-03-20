@@ -55,7 +55,7 @@ define('NP_ROUTER_DEFAULT', true);
 /**
  * 开启 Session
  */
-define('NP_SESSION_AUTO_START', true);
+define('NP_SESSION_AUTO_START', false);
 /**
  * 时区
  */
@@ -69,7 +69,7 @@ define('NP_TIMEZONE', 'Asia/Shanghai');
 /**
  * 使用数据库
  */
-define('NP_USE_DATABASE', true);
+define('NP_USE_DATABASE', false);
 /**
  * 使用的数据库类型，根据此调用相应数据库函数
  *
@@ -143,7 +143,7 @@ define('NP_MYSQL_DB_PREFIX', 'np_');
  *
  * 智能处理，可临时关闭缓存，不会导致网站报错
  */
-define('NP_USE_CACHE', true);
+define('NP_USE_CACHE', false);
 /**
  * 使用的缓存类型，根据此调用相应缓存函数
  *
