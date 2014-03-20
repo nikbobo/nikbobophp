@@ -137,7 +137,7 @@ if (defined('NP_USE_DATABASE') && NP_USE_DATABASE) {
 /**
  * 载入路由配置文件
  */
-(defined('NP_ROUTER_FILE') and file_exists(NP_ROUTER_FILE)) ? $aRouterRule = array_reverse(require NP_ROUTER_FILE) : exit('Not Found Router Configure');
+(defined('NP_ROUTER_FILE') and file_exists(NP_ROUTER_FILE)) ? $aRouterRule = is_array(require NP_ROUTER_FILE) ? array_reverse(require NP_ROUTER_FILE) : exit('Router Configure Must Is Array') : exit('Not Found Router Configure');
 /**
  * 开始分发路由
  */
@@ -191,6 +191,7 @@ if (empty($sController)) {
         _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
     }
 }
+$sController = !empty($sController) ? $sController : NP_DEFAULT_CONTROLLER;
 $sAction = !empty($sAction) ? $sAction : NP_DEFAULT_ACTION;
 $sController = $_SERVER['NP_CONTROLLER'] = ucfirst(basename(strtolower(strip_tags($sController))));
 $sAction = $_SERVER['NP_ACTION'] = ucfirst(basename(strtolower(strip_tags($sAction))));
