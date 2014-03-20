@@ -137,7 +137,7 @@ if (defined('NP_USE_DATABASE') && NP_USE_DATABASE) {
 /**
  * 载入路由配置文件
  */
-(defined('NP_ROUTER_FILE') and file_exists(NP_ROUTER_FILE)) ? $aRouterRule = is_array(require NP_ROUTER_FILE) ? array_reverse(require NP_ROUTER_FILE) : exit('Router Configure Must Is Array') : exit('Not Found Router Configure');
+(defined('NP_ROUTER_CONFIG_FILE') and file_exists(NP_ROUTER_CONFIG_FILE)) ? $aRouterRule = is_array(require NP_ROUTER_CONFIG_FILE) ? array_reverse(require NP_ROUTER_CONFIG_FILE) : exit('Router Configure Must Is Array') : exit('Not Found Router Configure');
 /**
  * 开始分发路由
  */

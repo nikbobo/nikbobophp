@@ -36,7 +36,7 @@ define('SITE_CHARSET', 'UTF-8');
 /**
  * 路由配置文件
  */
-define('NP_ROUTER_FILE', NP_APP_DIR . '/router.php');
+define('NP_ROUTER_CONFIG_FILE', NP_APP_DIR . '/router.php');
 /**
  * 默认前端控制器（FrontController）
  */
