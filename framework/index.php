@@ -183,8 +183,15 @@ if (defined('NP_ROUTER_DEFAULT') && NP_ROUTER_DEFAULT && !$bRouterMatch) {
     $sAction = array_shift($aUrlSegment);
     $aParameter = $aUrlSegment;
 }
-$sController = $_SERVER['NP_CONTROLLER'] = !empty($sController) ? $sController : NP_DEFAULT_CONTROLLER;
-$sAction = $_SERVER['NP_ACTION'] = !empty($sAction) ? $sAction : NP_DEFAULT_ACTION;
+if (empty($sController)) {
+    if ($sPathInfo === '/') {
+        $sController = NP_DEFAULT_CONTROLLER;
+    } else {
+        trigger_error('need controller.', E_USER_WARNING);
+        _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
+    }
+}
+$sAction = !empty($sAction) ? $sAction : NP_DEFAULT_ACTION;
 $sController = $_SERVER['NP_CONTROLLER'] = ucfirst(basename(strtolower(strip_tags($sController))));
 $sAction = $_SERVER['NP_ACTION'] = ucfirst(basename(strtolower(strip_tags($sAction))));
 $sControllerClass = $sController . 'Controller';
@@ -213,7 +220,7 @@ try {
         if ($oReflection->getNumberOfParameters() < 1) {
             $oReflection->invoke(new $sControllerClass());
         } else {
-            trigger_error($sControllerClass . '::' . $sActionMethod . '() need parameter(s)', E_USER_WARNING);
+            trigger_error($sControllerClass . '::' . $sActionMethod . '() need parameter(s).', E_USER_WARNING);
             _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
         }
     }
