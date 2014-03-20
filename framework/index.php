@@ -130,7 +130,7 @@ if (defined('NP_USE_DATABASE') && NP_USE_DATABASE) {
         file_exists($sDatabaseFunctionPath) and require $sDatabaseFunctionPath;
     }
 }
-// todo 在此载入数据库和缓存函数 function.extra.php
+// todo 在此载入缓存函数 function.extra.php
 /**
  * 路由分发
  */

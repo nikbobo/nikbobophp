@@ -76,7 +76,7 @@ function _session($sKey) {
  * 提示函数即将废止（Deprecated），使用 PHP 原生提示方式
  *
  * @param string $sDeprecated 即将废止的函数
- * @param string $sInstead 替代的函数
+ * @param string $sInstead    替代的函数
  */
 function _deprecated($sDeprecated, $sInstead) {
     trigger_error($sDeprecated . ' is deprecated, use ' . $sInstead . 'instead it.', E_USER_DEPRECATED);
@@ -102,9 +102,9 @@ function _echo($sMessage) {
  *
  * 输出一个消息并且退出当前脚本，包含特定状态码和永不过期的头部信息
  *
- * @param string $sTitle 页面标题
- * @param string $sMessage 提示信息
- * @param int $iHttpStatusCode HTTP 状态码
+ * @param string $sTitle          页面标题
+ * @param string $sMessage        提示信息
+ * @param int    $iHttpStatusCode HTTP 状态码
  */
 function _exit($sTitle, $sMessage, $iHttpStatusCode = 200) {
     if (!headers_sent()) {
@@ -237,9 +237,9 @@ function _nocache_header() {
 /**
  * 载入模板
  *
- * @param array $aData 模板中可供调用的变量，以数组键值对（Key => Value）形式撰写，经过处理后，数组键（Key）作为变量名，数组键（Value）作为变量的值
+ * @param array  $aData     模板中可供调用的变量，以数组键值对（Key => Value）形式撰写，经过处理后，数组键（Key）作为变量名，数组键（Value）作为变量的值
  * @param string $sTemplate 模板名称
- * @param string $sGroup 模板组
+ * @param string $sGroup    模板组
  */
 function _view(array $aData = array(), $sTemplate = 'default', $sGroup = 'web') {
     $_SERVER['NP_TEMPLATE'] = $sTemplate;

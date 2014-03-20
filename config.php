@@ -127,5 +127,11 @@ defined('SAE_APPNAME') ? define('NP_MYSQL_DB_PORT', SAE_MYSQL_PORT) : define('NP
  */
 define('NP_MYSQL_DB_CHARSET', 'utf8');
 /**
+ * MySQL 表前缀
+ *
+ * 如不需要，请注释此常量
+ */
+define('NP_MYSQL_DB_PREFIX', 'np_');
+/**
  * 以上是 MySQL 专属常量
  */
