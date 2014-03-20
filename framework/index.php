@@ -198,10 +198,15 @@ if (empty($sController)) {
         $sController = NP_DEFAULT_CONTROLLER;
     } else {
         trigger_error('need controller.', E_USER_WARNING);
-        _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
+        if (!headers_sent()) {
+            header('Content-Type: text/html; charset=' . SITE_CHARSET);
+            _status_code_header(404);
+            _nocache_header();
+        }
+        _view('404');
+        exit;
     }
 }
-$sController = !empty($sController) ? $sController : NP_DEFAULT_CONTROLLER;
 $sAction = !empty($sAction) ? $sAction : NP_DEFAULT_ACTION;
 $sController = $_SERVER['NP_CONTROLLER'] = ucfirst(basename(strtolower(strip_tags($sController))));
 $sAction = $_SERVER['NP_ACTION'] = ucfirst(basename(strtolower(strip_tags($sAction))));
@@ -216,7 +221,13 @@ if (!file_exists($sControllerPath)) {
     $sControllerPath = NP_FRAMEWORK_DIR . '/controller/' . $sControllerFile;
     if (!file_exists($sControllerPath)) {
         trigger_error('controller file ' . $sControllerFile . ' isn\'t found.', E_USER_WARNING);
-        _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
+        if (!headers_sent()) {
+            header('Content-Type: text/html; charset=' . SITE_CHARSET);
+            _status_code_header(404);
+            _nocache_header();
+        }
+        _view('404');
+        exit;
     }
 }
 require $sControllerPath;
@@ -232,12 +243,24 @@ try {
             $oReflection->invoke(new $sControllerClass());
         } else {
             trigger_error($sControllerClass . '::' . $sActionMethod . '() need parameter(s).', E_USER_WARNING);
-            _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
+            if (!headers_sent()) {
+                header('Content-Type: text/html; charset=' . SITE_CHARSET);
+                _status_code_header(404);
+                _nocache_header();
+            }
+            _view('404');
+            exit;
         }
     }
 } catch (ReflectionException $e) {
     trigger_error($e->getMessage(), E_USER_WARNING);
-    _exit('404 Not Found', '抱歉，找不到该页，请确认您输入的 URL 是否正确。', 404);
+    if (!headers_sent()) {
+        header('Content-Type: text/html; charset=' . SITE_CHARSET);
+        _status_code_header(404);
+        _nocache_header();
+    }
+    _view('404');
+    exit;
 }
 
 

@@ -237,19 +237,19 @@ function _nocache_header() {
 /**
  * 载入模板
  *
- * @param array  $aData     模板中可供调用的变量，以数组键值对（Key => Value）形式撰写，经过处理后，数组键（Key）作为变量名，数组键（Value）作为变量的值
  * @param string $sTemplate 模板名称
+ * @param array  $aData     模板中可供调用的变量，以数组键值对（Key => Value）形式撰写，经过处理后，数组键（Key）作为变量名，数组键（Value）作为变量的值
  * @param string $sGroup    模板组
  */
-function _view(array $aData = array(), $sTemplate = 'default', $sGroup = 'web') {
+function _view($sTemplate = 'default', array $aData = array(), $sGroup = 'web') {
     $_SERVER['NP_TEMPLATE'] = $sTemplate;
     $_SERVER['NP_TEMPLATE_GROUP'] = $sGroup;
-    $sTemplatePath = NP_APP_DIR . '/view/' . $sGroup . '/' . $sTemplate . '.php';
+    $sTemplatePath = NP_APP_DIR . '/view/' . $sGroup . '/' . $sTemplate . '.tpl.php';
     if (file_exists($sTemplatePath)) {
         is_array($aData) and extract($aData);
         require $sTemplatePath;
     } else {
-        $sTemplatePath = NP_FRAMEWORK_DIR . '/view/' . $sGroup . '/' . $sTemplate . '.php';
+        $sTemplatePath = NP_FRAMEWORK_DIR . '/view/' . $sGroup . '/' . $sTemplate . '.tpl.php';
         if (file_exists($sTemplatePath)) {
             is_array($aData) and extract($aData);
             require $sTemplatePath;
