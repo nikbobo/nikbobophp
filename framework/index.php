@@ -112,11 +112,11 @@ if (NP_DEBUG) {
  * 载入基础函数
  */
 require NP_FRAMEWORK_DIR . '/library/function.base.php';
-if (file_exists(NP_APP_DIR . 'library/function.base.php')) {
+if (file_exists(NP_APP_DIR . '/library/function.base.php')) {
     /**
      * 载入用户定义的基础函数
      */
-    require NP_APP_DIR . 'library/function.base.php';
+    require NP_APP_DIR . '/library/function.base.php';
 }
 /**
  * 载入数据库函数
