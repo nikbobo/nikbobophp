@@ -96,7 +96,7 @@ function np_mysql_safe_get_data($sSql, array $aParameter = array(), $oPdo = null
             $oStatement->bindValue($sParameter, $sValue, $iDataType);
         }
         $oStatement->execute();
-        while ($aFetch = $oStatement->fetchAll()) {
+        while ($aFetch = $oStatement->fetchAll(PDO::FETCH_ASSOC)) {
             $aData[$i++] = $aFetch;
         }
         $oStatement->closeCursor();
@@ -198,7 +198,7 @@ function np_mysql_get_data($sSql, $oPdo = null) {
     $i = 0;
     try {
         $oStatement = $oPdo->query($sSql);
-        while ($aFetch = $oStatement->fetchAll()) {
+        while ($aFetch = $oStatement->fetchAll(PDO::FETCH_ASSOC)) {
             $aData[$i++] = $aFetch;
         }
         $oStatement->closeCursor();
