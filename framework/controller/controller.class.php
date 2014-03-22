@@ -19,11 +19,11 @@ class Controller {
      * 预载方法，目前作用主要为载入 Model Function
      */
     function __construct() {
-        $sModelFile = NP_APP_DIR . '/model/function.' . basename(strtolower(_server('NP_CONTROLLER'))) . '.php';
+        $sModelFile = NP_APP_DIR . '/model/function.' . basename(strtolower(_server('NP_CONTROLLER', 'empty'))) . '.php';
         if (file_exists($sModelFile)) {
             require $sModelFile;
         } else {
-            $sModelFile = NP_FRAMEWORK_DIR . '/model/function.' . basename(strtolower(_server('NP_CONTROLLER'))) . '.php';
+            $sModelFile = NP_FRAMEWORK_DIR . '/model/function.' . basename(strtolower(_server('NP_CONTROLLER', 'empty'))) . '.php';
             if (file_exists($sModelFile)) {
                 require $sModelFile;
             }

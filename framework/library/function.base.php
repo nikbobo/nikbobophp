@@ -16,23 +16,39 @@ defined('IN_NP') or exit('Access Denied');
 /**
  * 获取 $_GET 指定键（Key）的值（Value），不会导致 PHP Warrning
  *
- * @param string $sKey
+ * @param string $sKey    键（Key）
+ * @param string $sFilter 过滤器，可选 isset（PHP isset 函数）和 empty（PHP empty 函数），默认为 isset
  *
  * @return mixed 如果存在该键（Key），返回对应的值（Value），不存在，返回假（false）
  */
-function _get($sKey) {
-    return isset($_GET[$sKey]) ? $_GET[$sKey] : false;
+function _get($sKey, $sFilter = 'isset') {
+    switch ($sFilter) {
+        case 'isset':
+            return isset($_GET[$sKey]) ? $_GET[$sKey] : false;
+        case 'empty':
+            return empty($_GET[$sKey]) ? $_GET[$sKey] : false;
+        default:
+            return isset($_GET[$sKey]) ? $_GET[$sKey] : false;
+    }
 }
 
 /**
  * 获取 $_POST 指定键（Key）的值（Value），不会导致 PHP Warrning
  *
- * @param string $sKey
+ * @param string $sKey    键（Key）
+ * @param string $sFilter 过滤器，可选 isset（PHP isset 函数）和 empty（PHP empty 函数），默认为 isset
  *
  * @return mixed 如果存在该键（Key），返回对应的值（Value），不存在，返回假（false）
  */
-function _post($sKey) {
-    return isset($_POST[$sKey]) ? $_POST[$sKey] : false;
+function _post($sKey, $sFilter = 'isset') {
+    switch ($sFilter) {
+        case 'isset':
+            return isset($_POST[$sKey]) ? $_POST[$sKey] : false;
+        case 'empty':
+            return empty($_POST[$sKey]) ? $_POST[$sKey] : false;
+        default:
+            return isset($_POST[$sKey]) ? $_POST[$sKey] : false;
+    }
 }
 
 /**
@@ -40,36 +56,59 @@ function _post($sKey) {
  *
  * @deprecated
  *
- * @param string $sKey
+ * @param string $sKey    键（Key）
+ * @param string $sFilter 过滤器，可选 isset（PHP isset 函数）和 empty（PHP empty 函数），默认为 isset
  *
  * @return mixed 如果存在该键（Key），返回对应的值（Value），不存在，返回假（false）
  */
-function _request($sKey) {
+function _request($sKey, $sFilter = 'isset') {
     _deprecated('_request()', '_get() or _post()');
-
-    return isset($_REQUEST[$sKey]) ? $_REQUEST[$sKey] : false;
+    switch ($sFilter) {
+        case 'isset':
+            return isset($_REQUEST[$sKey]) ? $_REQUEST[$sKey] : false;
+        case 'empty':
+            return empty($_REQUEST[$sKey]) ? $_REQUEST[$sKey] : false;
+        default:
+            return isset($_REQUEST[$sKey]) ? $_REQUEST[$sKey] : false;
+    }
 }
 
 /**
  * 获取 $_SERVER 指定键（Key）的值（Value），不会导致 PHP Warrning
  *
- * @param string $sKey
+ * @param string $sKey    键（Key）
+ * @param string $sFilter 过滤器，可选 isset（PHP isset 函数）和 empty（PHP empty 函数），默认为 isset
  *
  * @return mixed 如果存在该键（Key），返回对应的值（Value），不存在，返回假（false）
  */
-function _server($sKey) {
-    return isset($_SERVER[$sKey]) ? $_SERVER[$sKey] : false;
+function _server($sKey, $sFilter = 'isset') {
+    switch ($sFilter) {
+        case 'isset':
+            return isset($_SERVER[$sKey]) ? $_SERVER[$sKey] : false;
+        case 'empty':
+            return empty($_SERVER[$sKey]) ? $_SERVER[$sKey] : false;
+        default:
+            return isset($_SERVER[$sKey]) ? $_SERVER[$sKey] : false;
+    }
 }
 
 /**
  * 获取 $_SESSION 指定键（Key）的值（Value），不会导致 PHP Warning
  *
- * @param string $sKey
+ * @param string $sKey    键（Key）
+ * @param string $sFilter 过滤器，可选 isset（PHP isset 函数）和 empty（PHP empty 函数），默认为 isset
  *
  * @return mixed 如果存在该键（Key），返回对应的值（Value），不存在，返回假（false）
  */
-function _session($sKey) {
-    return isset($_SESSION[$sKey]) ? $_SESSION[$sKey] : false;
+function _session($sKey, $sFilter = 'isset') {
+    switch ($sFilter) {
+        case 'isset':
+            return isset($_SESSION[$sKey]) ? $_SESSION[$sKey] : false;
+        case 'empty':
+            return empty($_SESSION[$sKey]) ? $_SESSION[$sKey] : false;
+        default:
+            return isset($_SESSION[$sKey]) ? $_SESSION[$sKey] : false;
+    }
 }
 
 /**

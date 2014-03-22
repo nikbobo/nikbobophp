@@ -142,6 +142,10 @@ if (defined('NP_USE_CACHE') && NP_USE_CACHE) {
     require NP_FRAMEWORK_DIR . '/library/function.cache.none.php';
 }
 /**
+ * 载入扩展函数
+ */
+require NP_FRAMEWORK_DIR . '/library/function.extra.php';
+/**
  * 路由分发
  */
 /**
