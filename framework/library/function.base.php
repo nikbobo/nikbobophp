@@ -98,68 +98,6 @@ function _echo($sMessage) {
 }
 
 /**
- * PHP exit 增强版
- *
- * 输出一个消息并且退出当前脚本，包含特定状态码和永不过期的头部信息
- *
- * @param string $sTitle          页面标题
- * @param string $sMessage        提示信息
- * @param int    $iHttpStatusCode HTTP 状态码
- */
-function _exit($sTitle, $sMessage, $iHttpStatusCode = 200) {
-    if (!headers_sent()) {
-        header('Content-Type: text/html; charset=' . SITE_CHARSET);
-        _status_code_header($iHttpStatusCode);
-        _nocache_header();
-    }
-    ?>
-    <!DOCTYPE html>
-    <!-- IE bug fix: always pad the error page with enough characters such that it is greater than 512 bytes, even after gzip compression abcdefghijklmnopqrstuvwxyz1234567890aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz11223344556677889900abacbcbdcdcededfefegfgfhghgihihjijikjkjlklkmlmlnmnmononpopoqpqprqrqsrsrtstsubcbcdcdedefefgfabcadefbghicjkldmnoepqrfstugvwxhyz1i234j567k890laabmbccnddeoeffpgghqhiirjjksklltmmnunoovppqwqrrxsstytuuzvvw0wxx1yyz2z113223434455666777889890091abc2def3ghi4jkl5mno6pqr7stu8vwx9yz11aab2bcc3dd4ee5ff6gg7hh8ii9j0jk1kl2lmm3nnoo4p5pq6qrr7ss8tt9uuvv0wwx1x2yyzz13aba4cbcb5dcdc6dedfef8egf9gfh0ghg1ihi2hji3jik4jkj5lkl6kml7mln8mnm9ono-->
-    <html lang="zh-CN">
-    <head>
-    <meta charset="<?php echo SITE_CHARSET; ?>">
-    <title><?php echo $sTitle; ?> - <?php echo SITE_NAME; ?></title>
-    <style>
-        html {
-            background : #4786B3;
-        }
-
-        body {
-            margin           : 0;
-            padding          : 60px;
-            font             : 14px/18px Arial, Helvetica, sans-serif;
-            color            : #FFFFFF;
-            background-color : transparent;
-        }
-
-        h1, p {
-            text-align : center;
-        }
-
-        h1 {
-            margin      : 30px 0 0;
-            font        : bold 40px/40px Arial, Helvetica, sans-serif;
-            text-shadow : 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        p {
-            margin : 10px 0 20px;
-            font   : 300 18px/25px Arial, Helvetica, sans-serif;
-            color  : #E0EFF6;
-        }
-    </style>
-    </head>
-    <body>
-    <h1><?php echo $sTitle; ?></h1>
-
-    <p><?php echo $sMessage; ?></p>
-    </body>
-    </html>
-    <?php
-    exit;
-}
-
-/**
  * 输出指定 HTTP 状态码的头部信息
  *
  * @param int $iHttpStatusCode HTTP 状态码
@@ -255,4 +193,42 @@ function _view($sTemplate = 'default', array $aData = array(), $sGroup = 'web') 
             require $sTemplatePath;
         }
     }
+}
+
+/**
+ * 载入模板，并将 HTML 返回
+ *
+ * @param string $sTemplate 模板名称
+ * @param array  $aData     模板中可供调用的变量，以数组键值对（Key => Value）形式撰写，经过处理后，数组键（Key）作为变量名，数组键（Value）作为变量的值
+ * @param string $sGroup    模板组
+ *
+ * @return string 返回处理好的 HTML 内容
+ */
+function _view_raw($sTemplate = 'default', array $aData = array(), $sGroup = 'web') {
+    ob_start();
+    _view($sTemplate, $aData, $sGroup);
+    $sContent = ob_get_contents();
+    ob_end_clean();
+    return $sContent;
+}
+
+/**
+ * PHP exit 增强版
+ *
+ * 输出一个消息并且退出当前脚本，包含特定状态码和永不过期的头部信息
+ *
+ * @param   string $sTopTitle       页面标题
+ * @param string   $sTitle          提示信息标题
+ * @param string   $sMessage        提示信息
+ * @param int      $iHttpStatusCode HTTP 状态码
+ */
+function _exit($sTopTitle, $sTitle, $sMessage, $iHttpStatusCode = 200) {
+    if (!headers_sent()) {
+        header('Content-Type: text/html; charset=' . SITE_CHARSET);
+        _status_code_header($iHttpStatusCode);
+        _nocache_header();
+    }
+    $data = array('top_title' => $sTopTitle, 'title' => $sTitle, 'message' => $sMessage);
+    _view('info', $data);
+    exit;
 }
