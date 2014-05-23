@@ -6,7 +6,7 @@
  * Time: 20:40
  */
 defined('IN_FRAMEWORK') or exit('Access denied.'); // 载入安全检查
-class NikboboLoader {
+class NikboboLoader extends NikboboObject {
     private $application_path;
     private $framework_path;
     private $original_include_path;
@@ -32,6 +32,10 @@ class NikboboLoader {
         } elseif (strpos($class, 'Model') !== false) {
             if (!$this->load($this->application_path . '/Model/' . $class . '.php')) {
                 $this->load($this->framework_path . '/Model/' . $class . '.php');
+            }
+        } elseif (strpos($class, 'Error') !== false) {
+            if (!$this->load($this->application_path . '/Error/' . $class . '.php')) {
+                $this->load($this->framework_path . '/Error/' . $class . '.php');
             }
         } elseif (strpos($class, 'Custom') !== false) {
             $this->load($this->application_path . '/Custom/' . $class . '.php');
