@@ -15,5 +15,5 @@ define('VIEW', ROOT . '/view'); // 视图目录
 define('LIB', ROOT . '/lib'); // 库目录
 define('ERROR', VIEW . '/error'); // 错误页面目录
 define('LAYOUT', VIEW . '/layout'); // 布局目录
-require CORE . '/autoloader.php'; // 载入自动类装载器
+require CORE . '/Autoloader.php'; // 载入自动类装载器
 Autoloader::register('application'); // 注册一个新的自动类装载器
