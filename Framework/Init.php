@@ -13,4 +13,3 @@ NikboboRouter::set('Default', 'index');
 NikboboRouter::add('/', 'aa', 'bb');
 NikboboRouter::add('/aaa', 'cc', 'ddd');
 NikboboRouter::add('/aa/{int}', 'ewe', 'ss');
-NikboboRouter::get();
