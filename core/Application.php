@@ -57,6 +57,6 @@ class Application {
             $this->error_log = $file_path;
             return $this;
         } else
-            throw new ApplicationException('Error log file path', 104);
+            throw new ApplicationException('Path isn\'t a valid path', 104);
     }
 } 

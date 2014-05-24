@@ -143,7 +143,7 @@ class Autoloader {
         if (!isset($this->classes[$class_name]))
             $this->classes[$class_name] = $file_path;
         else
-            throw new ApplicationException('Class already register', 103);
+            throw new ApplicationException('Class already registered', 103);
     }
 
     /**
@@ -151,7 +151,7 @@ class Autoloader {
      *
      * 该注册不会检查是否重复注册，请慎用
      * 重复注册可能会导致之前的被覆盖
-     * @param array $class_list 自动装载类列表，数组格式 array('类' => '文件全路径')
+     * @param array $class_list 自动装载类列表，数组格式 array('类' => '文件全路径')，注意，不会检查格式是否正确
      */
     public function registers(array $class_list) {
         array_merge($class_list, $this->classes);

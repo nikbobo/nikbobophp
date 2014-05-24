@@ -17,14 +17,21 @@ define('VIEW', ROOT . '/view'); // 视图目录
 define('LIB', ROOT . '/lib'); // 库目录
 define('ERROR', VIEW . '/error'); // 错误页面目录
 define('LAYOUT', VIEW . '/layout'); // 布局目录
+define('CHARSET', 'UTF-8'); // 全局页面编码
 require CORE . '/Autoloader.php'; // 载入自动类装载器
 try {
-    Autoloader::create('application'); // 注册一个新的自动类装载器
-    Autoloader::create('application')->register('Application', CORE . '/Application.php'); // 注册应用类
-    Application::create('nikbobo')->setErrorLog(LOG)
-               ->run(DEBUG); // 创建一个名称为“nikbobo”的应用，设置错误日志路径，运行（根据 DEBUG 常量确定是否以开发者模式运行）
-    // Application::create('nikbobo')->run(DEBUG); // 创建一个名称为“nikbobo”的应用，运行（根据 DEBUG 常量确定是否以开发者模式运行）
-    Autoloader::create('application')->register('Router', CORE . '/Router.php'); // 注册 URI 路由类
+    Autoloader::create('core'); // 注册一个新的自动类装载器
+    Autoloader::create('core')->register('Application', CORE . '/Application.php'); // 注册应用类
+    Application::create('app')->setErrorLog(LOG)
+               ->run(DEBUG); // 创建一个应用，设置错误日志路径，运行（根据 DEBUG 常量确定是否以开发者模式运行）
+    // Application::create('app')->run(DEBUG); // 创建一个应用，运行（根据 DEBUG 常量确定是否以开发者模式运行）
+    Autoloader::create('core')->register('Error', CORE . '/Error.php'); // 注册错误处理类
+    Autoloader::create('core')->register('Response', CORE . '/Response.php'); // 注册 Header 处理类
+    Autoloader::create('core')->register('Router', CORE . '/Router.php'); // 注册 URI 路由类
+    Router::create('router')->setAutoloader(Autoloader::create('controller'))
+          ->setControllerClassDir(CONTROLLER)
+          ->add('/', 'Welcome', 'index'); // 创建一个路由，设置为一个新的自动装载器，设置控制器路径，并添加首页路由规则
+    // 在此处添加路由规则，或者 require 一个文件专门定义路由规则
 } catch (ApplicationException $e) {
     if (DEBUG)
         echo $e->getTraceAsHtml();
