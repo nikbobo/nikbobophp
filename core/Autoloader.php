@@ -11,89 +11,6 @@
 defined('IN') or exit('Access Denied'); // 载入安全检查
 
 /**
- * Class ApplicationException 全局异常捕获器
- */
-class ApplicationException extends Exception {
-    /**
-     * 获取异常消息（HTML格式）
-     * @return string
-     */
-    public function getMessageAsHtml() {
-        return str_replace(array('{Code}', '{Message}'),
-                           array($this->getCode(), $this->getMessage()),
-            <<<'HTML'
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<title>Application Error</title>
-<style type="text/css">
-    .message {
-        padding          : 10px;
-        background-color : red;
-        color            : white;
-    }
-    .trace {
-        padding          : 10px;
-        background-color : yellow;
-        color            : black;
-    }
-</style>
-</head>
-<body>
-<h1>Application Error</h1>
-<p class="message">
-    [{Code}] {Message}
-</p>
-</body>
-</html>
-HTML
-        );
-    }
-
-    /**
-     * 获取跟踪报告（HTML 格式）
-     * @return string
-     */
-    public function getTraceAsHtml() {
-        return str_replace(array('{Code}', '{Message}', '{Trace}'),
-                           array($this->getCode(), $this->getMessage(), nl2br($this->getTraceAsString())),
-            <<<'HTML'
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<title>Application Error</title>
-<style type="text/css">
-    .message {
-        padding          : 10px;
-        background-color : red;
-        color            : white;
-    }
-    .trace {
-        padding          : 10px;
-        background-color : yellow;
-        color            : black;
-    }
-</style>
-</head>
-<body>
-<h1>Application Error</h1>
-<p class="message">
-    [{Code}] {Message}
-</p>
-<h2>PHP Debug</h2>
-<p class="trace">
-    {Trace}
-</p>
-</body>
-</html>
-HTML
-        );
-    }
-}
-
-/**
  * Class Autoloader 自动类装载器
  */
 class Autoloader {
@@ -121,7 +38,7 @@ class Autoloader {
     /**
      * __autoload() 函数
      * @param string $class_name 尝试自动装载的类
-     * @throws ApplicationException 类无法自动装载将抛出异常（类未注册，类对应文件不可读）
+     * @throws ApplicationException 类无法自动装载将抛出异常（类对应文件不可读）
      */
     public function load($class_name) {
         if (isset($this->classes[$class_name])) {
@@ -129,8 +46,7 @@ class Autoloader {
                 require $this->classes[$class_name];
             else
                 throw new ApplicationException('Class file isn\'t readable', 102);
-        } else
-            throw new ApplicationException('Class not register', 101);
+        }
     }
 
     /**
@@ -143,7 +59,9 @@ class Autoloader {
         if (!isset($this->classes[$class_name]))
             $this->classes[$class_name] = $file_path;
         else
-            throw new ApplicationException('Class already registered', 103);
+            throw new ApplicationException('Class "' .
+                                           htmlentities($class_name) .
+                                           '" already registered', 103);
     }
 
     /**
@@ -190,6 +108,8 @@ class Autoloader {
         if (isset($this->classes[$class_name]))
             unset($this->classes[$class_name]);
         else
-            throw new ApplicationException('Class not register', 101);
+            throw new ApplicationException('Class "' .
+                                           htmlentities($class_name) .
+                                           '" not register', 101);
     }
 } 

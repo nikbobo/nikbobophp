@@ -14,26 +14,25 @@ defined('IN') or exit('Access Denied'); // 载入安全检查
  * Class Router URI 路由
  */
 class Router {
-    private static $instances = array();
+    private static $instance;
     /**
      * @var Autoloader
      */
     private $autoloader;
     private $class_dir;
+    private $not_match_to;
     private $routes = array();
 
-    private function __construct() {
-    }
+    private function __construct() { }
 
     /**
      * 创建路由
-     * @param string $router_name 路由名称
-     * @return Router 如果此路由已经创建则返回该路由，否则自动创建一个新的并保存
+     * @return Router 如果路由已经创建则返回该路由，否则自动创建一个新的并保存
      */
-    public static function create($router_name) {
-        if (empty(self::$instances[$router_name]))
-            self::$instances[$router_name] = new Router();
-        return self::$instances[$router_name];
+    public static function create() {
+        if (empty(self::$instance))
+            self::$instance = new Router();
+        return self::$instance;
     }
 
     /**
@@ -45,6 +44,20 @@ class Router {
     public function setControllerClassDir($class_dir) {
         if (is_dir($class_dir)) {
             $this->class_dir = $class_dir;
+            return $this;
+        } else
+            throw new ApplicationException('Path isn\'t a valid path', 104);
+    }
+
+    /**
+     * 设置无法匹配（404 未找到）跳转到的文件路径
+     * @param string $file_path 404 文件路径
+     * @return Router $this 返回对象本身以方便继续执行其他操作
+     * @throws ApplicationException 如果该文件不可读将抛出异常
+     */
+    public function setNotMatchTo($file_path) {
+        if (is_readable($file_path)) {
+            $this->not_match_to = $file_path;
             return $this;
         } else
             throw new ApplicationException('Path isn\'t a valid path', 104);
@@ -126,9 +139,42 @@ class Router {
         return $this;
     }
 
-    public function dispatch($path_info) {
-        if (empty($path_info))
-            $path_info = '/';
-        // todo 使用正则匹配和反射机制分发路由
+    public function dispatch(Response $response) {
+        $path_info = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+        foreach ($this->routes as $regex => $to) {
+            if (preg_match('#^/?' . $regex . '/?$#i', $path_info, $matches)) {
+                $controller_class = $to['controller'] . 'Controller';
+                $action_method    = $to['action'] . 'Action';
+                $parameters       = (array) $matches;
+                @array_shift($parameters);
+                break;
+            }
+        }
+        if (!empty($controller_class) && !empty($action_method)) {
+            try {
+                $reflection = new ReflectionMethod($controller_class, $action_method);
+                if (!empty($parameters) && $reflection->getNumberOfParameters() === count($parameters)) {
+                    $reflection->invokeArgs(new $controller_class(), $parameters);
+                } else {
+                    if ($reflection->getNumberOfParameters() < 1) {
+                        $reflection->invoke(new $controller_class());
+                    } else {
+                        $this->notMatch($response);
+                    }
+                }
+            } catch (ReflectionException $e) {
+                $this->notMatch($response);
+            }
+        } else {
+            $this->notMatch($response);
+        }
+    }
+
+    private function notMatch(Response $response) {
+        if (is_readable($this->not_match_to)) {
+            $response->setStatusCode(404)->respond();
+            require $this->not_match_to;
+        } else
+            throw new ApplicationException('Not match to isn\'t set', 110);
     }
 } 

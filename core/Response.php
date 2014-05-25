@@ -14,6 +14,7 @@ defined('IN') or exit('Access Denied'); // 载入安全检查
  * Class Respond 头响应器
  */
 class Response {
+    private static $instance;
     private $http_code = array(100 => 'Continue',
                                101 => 'Switching Protocols',
                                200 => 'OK',
@@ -56,21 +57,16 @@ class Response {
     private $content_type = 'text/html';
     private $headers = array();
 
-    /**
-     * __construct 函数
-     * @param int $status_code HTTP 状态码
-     */
-    private function __construct($status_code = 200) {
-        $this->setStatusCode($status_code);
-    }
+    private function __construct() { }
 
     /**
-     * 创建一个新响应
-     * @param int $status_code HTTP 状态码
+     * 创建响应
      * @return Response
      */
-    public static function create($status_code = 200) {
-        return new Response($status_code);
+    public static function create() {
+        if (empty(self::$instance))
+            self::$instance = new Response();
+        return self::$instance;
     }
 
     /**
@@ -87,6 +83,14 @@ class Response {
             throw new ApplicationException('Unknown http status code "' .
                                            htmlentities($status_code) .
                                            '"', 108);
+    }
+
+    /**
+     * 获取 HTTP 状态码
+     * @return int 准备发送的 HTTP 状态码
+     */
+    public function getStatusCode() {
+        return $this->status_code;
     }
 
     /**
@@ -109,17 +113,36 @@ class Response {
         return $this;
     }
 
+    /**
+     * 设置跳转
+     * @param string $url         跳转到 URL
+     * @param int    $status_code HTTP 状态码
+     */
+    public function setLocation($url, $status_code = 302) {
+        switch ($status_code) {
+            case 301:
+                $this->setStatusCode(301);
+                break;
+            case 302:
+                $this->setStatusCode(302);
+                break;
+            default:
+                $this->setStatusCode(302);
+                break;
+        }
+        $this->setHeader('Location', $url);
+    }
+
 
     /**
      * 添加头部信息
-     * @param array|string $header 头部信息（单条或多条（数组））
+     * @param string $key   Header 头
+     * @param string $value 对应的值
      * @return Response $this 返回对象本身以方便继续执行其他操作
      */
-    public function addHeader($header) {
-        if (is_array($header))
-            array_merge($this->headers, $header);
-        else
-            $this->headers[] = $header;
+    public function setHeader($key, $value) {
+        $key             = str_replace(' ', '-', ucwords(str_replace('-', ' ', $key)));
+        $this->headers[] = $key . ': ' . $value;
         return $this;
     }
 
@@ -127,6 +150,9 @@ class Response {
      * 执行响应
      */
     public function respond() {
+        if (headers_sent())
+            throw new ApplicationException('Headers already sent', 109);
+
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
         header($protocol . ' ' . $this->status_code . ' ' . $this->http_code[$this->status_code],
                true,
@@ -136,5 +162,6 @@ class Response {
             header($header, true);
         }
         header('X-Powered-By: Nikbobo PHP Framework', true);
+        self::$instance = null;
     }
 } 

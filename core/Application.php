@@ -14,20 +14,17 @@ defined('IN') or exit('Access Denied'); // 载入安全检查
  * Class Application 应用
  */
 class Application {
-    private static $instances = array();
     private $error_log;
+    private $session_start = false;
 
     private function __construct() { }
 
     /**
      * 创建应用
-     * @param string $app_name 应用名称
-     * @return Application 如果此应用已经创建则返回该应用，否则自动创建一个新的并保存
+     * @return Application 如果应用已经创建则返回该应用，否则自动创建一个新的并保存
      */
-    public static function create($app_name) {
-        if (empty(self::$instances[$app_name]))
-            self::$instances[$app_name] = new Application();
-        return self::$instances[$app_name];
+    public static function create() {
+        return new Application();
     }
 
     /**
@@ -44,6 +41,8 @@ class Application {
                 ini_set('error_log', $this->error_log);
             }
         }
+        if (is_bool($this->session_start) && $this->session_start)
+            session_start();
     }
 
     /**
@@ -58,5 +57,16 @@ class Application {
             return $this;
         } else
             throw new ApplicationException('Path isn\'t a valid path', 104);
+    }
+
+    /**
+     * 设置是否自动启动 Session
+     * @param bool $session_start 是否自动启动 Session
+     * @return Application $this 返回对象本身以方便继续执行其他操作
+     */
+    public function setSessionStart($session_start = false) {
+        if (is_bool($session_start))
+            $this->session_start = $session_start;
+        return $this;
     }
 } 
